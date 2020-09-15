@@ -5,16 +5,8 @@ plugins {
 group 'me.techchrism'
 version '1.0-SNAPSHOT'
 
-jar {
-    archiveFileName = "${project.name}.jar"
-}
-
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
 }
 
 sourceCompatibility = 1.8
@@ -44,4 +36,13 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
+}
+
+jar {
+    archiveFileName = "${project.name}.jar"
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
