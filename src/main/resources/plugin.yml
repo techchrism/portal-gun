@@ -1,0 +1,5 @@
+name: PortalGun
+version: ${}
+main: me.techchrism.portalgun.PortalGun
+author: Techdoodle
+api-version: 1.14
