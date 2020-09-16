@@ -15,7 +15,7 @@ class PortalGun : JavaPlugin(), Listener {
     override fun onEnable() {
         portalGunKey = NamespacedKey(this, "portal-gun")
         server.pluginManager.registerEvents(this, this)
-        val portalGunCommand: PortalGunCommand = PortalGunCommand()
+        val portalGunCommand = PortalGunCommand()
         server.getPluginCommand("portalgun")?.setExecutor(portalGunCommand)
         server.getPluginCommand("portalgun")?.setTabCompleter(portalGunCommand)
     }

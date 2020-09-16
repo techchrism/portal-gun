@@ -1,5 +1,6 @@
 package me.techchrism.portalgun
 
+import org.bukkit.Color
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -104,8 +105,6 @@ class PortalCandidate() {
                 }
 
                 // Check above/below to see if the target is the top or the bottom
-
-                // Check above/below to see if the target is the top or the bottom
                 viable = isViableVerticalBlock(target.getRelative(BlockFace.DOWN), face)
                 if (viable.isNotEmpty()) {
                     viable = isViableVerticalBlock(target.getRelative(BlockFace.UP), face)
@@ -169,9 +168,9 @@ class PortalCandidate() {
                     candidate.face = current.getFace(previous)
                     candidate.bottom = current
                     candidate.top = current.getRelative(BlockFace.SOUTH)
-                    //TODO ParticleUtils.drawX(player, candidate)
+                    ParticleUtils.drawX(player, candidate)
                 } else {
-                    //TODO ParticleUtils.drawElipse(player, candidate, 0.45, 0.9, Color.LIME)
+                    ParticleUtils.drawEllipse(player, candidate, 0.45, 0.9, Color.LIME)
                 }
                 return candidate
             }
