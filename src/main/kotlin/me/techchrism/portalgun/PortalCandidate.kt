@@ -14,7 +14,7 @@ class PortalCandidate() {
     var valid: Boolean = false
     var invalidReason: String = "Uninitialized"
 
-    constructor(top: Block, bottom: Block, face: BlockFace) {
+    constructor(top: Block, bottom: Block, face: BlockFace) : this() {
         this.top = top
         this.bottom = bottom
         this.face = face
