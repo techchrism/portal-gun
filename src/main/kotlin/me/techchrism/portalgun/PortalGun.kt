@@ -68,7 +68,7 @@ class PortalGun : JavaPlugin(), Listener {
         lateinit var portalGunKey: NamespacedKey
 
         fun isPortalGun(item: ItemStack): Boolean {
-            return item.itemMeta?.persistentDataContainer?.has(portalGunKey, PersistentDataType.BYTE) != null
+            return item.itemMeta?.persistentDataContainer?.get(portalGunKey, PersistentDataType.BYTE) != null
         }
         
         fun generatePortalGun(): ItemStack {
