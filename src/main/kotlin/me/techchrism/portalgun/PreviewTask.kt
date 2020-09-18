@@ -12,18 +12,21 @@ class PreviewTask : BukkitRunnable() {
         if (ticks > 100) {
             ticks = 0
         }
+        // Preview portal location
         for (p in Bukkit.getServer().onlinePlayers) {
             val main = p.inventory.itemInMainHand
             if (PortalGun.isPortalGun(main)) {
                 PortalCandidate.checkFor(p)
             }
         }
+        // Draw particles 4 and reset sand times a second
         if (ticks % 5 == 0) {
             pair.drawParticles()
             pair.resetFallingTimer()
         }
+        // Perform teleportation, prediction, and suctioning checks every tick
         pair.checkTeleportation()
-        pair.checkSucktioning()
+        pair.checkSuctioning()
         pair.predictTeleportation()
     }
 }

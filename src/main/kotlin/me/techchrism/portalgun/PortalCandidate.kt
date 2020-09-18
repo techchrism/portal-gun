@@ -23,10 +23,21 @@ class PortalCandidate() {
     }
 
     companion object {
+        /**
+         * Check if the block can support a portal
+         * @param block Block the block to check
+         * @return Boolean true if the block can support a portal
+         */
         private fun isPortalableBlock(block: Block): Boolean {
             return block.type.isOccluding
         }
 
+        /**
+         * Checks if the provided block and direction are valid for a full portal (including edges)
+         * @param target Block the block to check
+         * @param face BlockFace the direction of the second block in the portal
+         * @return String indicates any problems with the portal; empty if no problems
+         */
         private fun isViableVerticalBlock(target: Block, face: BlockFace): String {
             if (!isPortalableBlock(target)) {
                 return "Target block is not valid for portals"
@@ -62,6 +73,12 @@ class PortalCandidate() {
             } else ""
         }
 
+        /**
+         * Checks if the provided block and direction are valid for a full portal (including edges)
+         * @param target Block the block to check
+         * @param face BlockFace the direction of the second block in the portal
+         * @return String indicates any problems with the portal; empty if no problems
+         */
         private fun isViableHorizontalBlock(target: Block, face: BlockFace): String {
             if (!isPortalableBlock(target)) {
                 return "Target block is not valid for portals"
@@ -92,6 +109,13 @@ class PortalCandidate() {
             } else ""
         }
 
+        /**
+         * Tries to get a portal candidate for the provided block, targeted face, and target direction
+         * @param target Block the block to try to establish a candidate on
+         * @param face BlockFace the face of the block to use for the portal
+         * @param playerDirection BlockFace the closest BlockFace representing the player direction
+         * @return PortalCandidate an attempt at a generated portal candidate. may be invalid
+         */
         private fun getPortalCandidate(target: Block, face: BlockFace, playerDirection: BlockFace): PortalCandidate {
             val candidate = PortalCandidate()
             candidate.face = face
@@ -149,6 +173,11 @@ class PortalCandidate() {
             return candidate
         }
 
+        /**
+         * Tries to get a PortalCandidate for the player based on where they're looking
+         * @param player Player the player to check for
+         * @return PortalCandidate an attempt at a generated portal candidate. may be invalid
+         */
         fun checkFor(player: Player): PortalCandidate {
             val candidate: PortalCandidate
             val axis: Array<BlockFace> = arrayOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)

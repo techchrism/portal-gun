@@ -13,6 +13,13 @@ import kotlin.math.sin
 
 class ParticleUtils {
     companion object {
+        /**
+         * Get a relative 3d coordinate from a portal candidate using the exit surface as a plane
+         * @param candidate PortalCandidate the portal candidate to use as a surface
+         * @param relativeX Double the x coordinate on the plane
+         * @param relativeY Double the y coordinate on the plane
+         * @return Location the calculated 3d location
+         */
         private fun getRelativePosition(candidate: PortalCandidate, relativeX: Double, relativeY: Double): Location {
             if(candidate.top == null || candidate.bottom == null) {
                 throw IllegalArgumentException()
@@ -37,6 +44,11 @@ class ParticleUtils {
             return loc
         }
 
+        /**
+         * Draws a portal for the player
+         * @param p Player the player to draw a portal for
+         * @param candidate PortalCandidate the candidate to use as a portal drawing location
+         */
         fun drawX(p: Player, candidate: PortalCandidate) {
             var i = 0.1
             while (i < 0.9) {
@@ -54,6 +66,14 @@ class ParticleUtils {
             }
         }
 
+        /**
+         * Draws an ellipse for the provided player
+         * @param p Player the player to display particles for
+         * @param candidate PortalCandidate the candidate to use as a location base
+         * @param width Double the width of the ellipse
+         * @param height Double the height of the ellipse
+         * @param color Color the color of the particles
+         */
         fun drawEllipse(p: Player, candidate: PortalCandidate, width: Double, height: Double, color: Color) {
             var i = 0.0
             while (i < 2 * Math.PI) {
@@ -68,6 +88,13 @@ class ParticleUtils {
             }
         }
 
+        /**
+         * Draws an ellipse in the world
+         * @param candidate PortalCandidate the candidate to use as a location
+         * @param width Double the width of the ellipse
+         * @param height Double the height of the ellipse
+         * @param color Color the color of the particles
+         */
         fun drawEllipse(candidate: PortalCandidate, width: Double, height: Double, color: Color) {
             var i = 0.0
             while (i < 2 * Math.PI) {
@@ -82,7 +109,14 @@ class ParticleUtils {
             }
         }
 
-        fun drawLine(start: Location, finish: Location, space: Double, color: Color) {
+        /**
+         * Draws a line between two locations
+         * @param start Location the starting location
+         * @param finish Location the finishing location
+         * @param space Double the space between particles on the line
+         * @param color Color the particle color
+         */
+        private fun drawLine(start: Location, finish: Location, space: Double, color: Color) {
             val world = start.world
             val distance = start.distance(finish)
             val p1 = start.toVector()
@@ -96,7 +130,13 @@ class ParticleUtils {
             }
         }
 
-        fun outlineBoundingBox(box: BoundingBox, w: World?, color: Color) {
+        /**
+         * Outlines a bounding box with particles
+         * @param box BoundingBox the bounding box to outline
+         * @param w World the world to draw the particles in
+         * @param color Color the color of the particles
+         */
+        fun outlineBoundingBox(box: BoundingBox, w: World, color: Color) {
             val s = 0.8
             drawLine(Location(w, box.maxX, box.maxY, box.maxZ), Location(w, box.minX, box.maxY, box.maxZ), s, color)
             drawLine(Location(w, box.maxX, box.minY, box.maxZ), Location(w, box.minX, box.minY, box.maxZ), s, color)

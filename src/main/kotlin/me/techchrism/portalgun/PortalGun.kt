@@ -57,6 +57,7 @@ class PortalGun : JavaPlugin(), Listener {
 
     @EventHandler
     fun onPlayerSwapHandItems(event: PlayerSwapHandItemsEvent) {
+        // Use the swap event (default as "f" key) as a keybind to clear portals
         if (isPortalGun(event.offHandItem!!)) {
             event.isCancelled = true
             previewTask.pair.clear()
@@ -67,10 +68,19 @@ class PortalGun : JavaPlugin(), Listener {
     companion object {
         lateinit var portalGunKey: NamespacedKey
 
+        /**
+         * Checks if the provided item is a valid portal gun
+         * @param item ItemStack the item to check
+         * @return Boolean true if the item is a valid portal gun
+         */
         fun isPortalGun(item: ItemStack): Boolean {
             return item.itemMeta?.persistentDataContainer?.get(portalGunKey, PersistentDataType.BYTE) != null
         }
-        
+
+        /**
+         * Generates a new portal gun
+         * @return ItemStack the generated portal gun
+         */
         fun generatePortalGun(): ItemStack {
             val item = ItemStack(Material.DIAMOND_HORSE_ARMOR, 1)
             val meta: ItemMeta? = item.itemMeta

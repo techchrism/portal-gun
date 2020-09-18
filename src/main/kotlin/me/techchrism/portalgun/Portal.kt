@@ -95,6 +95,10 @@ class Portal {
         bottomLoc.chunk.load()
     }
 
+    /**
+     * Destroys the portal and restores blocks
+     * Loads the portal if not already loaded
+     */
     fun destroy() {
         if (!isLoaded) {
             load()
@@ -107,13 +111,18 @@ class Portal {
         bottomLoc.block.blockData = bottomData
     }
 
+    /**
+     * Teleports the provided entity to this portal
+     * @param entity Entity the entity to teleport
+     * @param from BlockFace the direction of the source portal
+     * @param top Boolean true if the entity should be teleported to the top block
+     */
     fun teleportHere(entity: Entity, from: BlockFace, top: Boolean) {
         if (!isLoaded) {
             load()
         }
         val tall = entity.height > 1.0
-        val to: Location
-        to = if (top && !tall) {
+        val to = if (top && !tall) {
             topLoc.clone()
         } else {
             bottomLoc.clone()
@@ -124,8 +133,8 @@ class Portal {
         } else {
             to.subtract(0.0, 0.5, 0.0)
         }
-        to.direction = Portal.normalizeVector(entity.location.direction.clone(), facing, from)
-        val velocity: Vector = Portal.normalizeVector(entity.velocity.clone(), facing, from)
+        to.direction = normalizeVector(entity.location.direction.clone(), facing, from)
+        val velocity: Vector = normalizeVector(entity.velocity.clone(), facing, from)
         entity.teleport(to)
         entity.velocity = velocity
         if (entity is Player) {
@@ -133,6 +142,9 @@ class Portal {
         }
     }
 
+    /**
+     * Draws portal ellipse particles and bounding box
+     */
     fun drawParticles() {
         if (!isLoaded || color == null) {
             return
@@ -140,7 +152,6 @@ class Portal {
         val candidate = PortalCandidate(topBlock!!, bottomBlock!!, facing)
         ParticleUtils.drawEllipse(candidate, 0.45, 0.9, color!!)
 
-        //ParticleUtils.drawLine(bottomLoc, bottomLoc.clone().add(facing.getDirection().multiply(5)), 0.5);
         ParticleUtils.outlineBoundingBox(funnelBoundingBox!!, bottomLoc.world, Color.AQUA)
         ParticleUtils.outlineBoundingBox(predictiveBoundingBox!!, bottomLoc.world, Color.YELLOW)
     }
@@ -163,6 +174,13 @@ class Portal {
         }
     }
 
+    /**
+     * Generates a bounding box centered on the portal
+     * @param expand Double the amount to expand the box outwards orthogonal to the portal exit direction
+     * @param extend Double the amount to extend the box outwards in the portal exit direction
+     * @param shift Double shifts the bounding box out from the portal exit direction
+     * @return BoundingBox the generated bounding box
+     */
     private fun getBoundingBox(expand: Double, extend: Double, shift: Double): BoundingBox {
         val box = BoundingBox.of(bottomBlock!!, topBlock!!)
         val basics = arrayOf(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)
@@ -196,6 +214,12 @@ class Portal {
         }
     }
 
+    /**
+     * Attempt to predict inevitable teleportation from entities moving at high speeds
+     * This was implemented to solve the problem of fast-moving entities hitting the
+     * ground/walls before the teleportation checking tick executes
+     * @param other Portal the portal to teleport to
+     */
     fun predictTeleportation(other: Portal) {
         val entities = bottomLoc.world!!.getNearbyEntities(predictiveBoundingBox!!)
         for (e in entities) {
@@ -213,7 +237,11 @@ class Portal {
         }
     }
 
-    fun checkSucktioning() {
+    /**
+     * Checks nearby entities to see if they are moving quickly towards the portal
+     * If they are, it will adjust their trajectory to enter the portal
+     */
+    fun checkSuctioning() {
         val entities = bottomLoc.world!!.getNearbyEntities(funnelBoundingBox!!)
         val midpoint = Location(
             topLoc.world,
@@ -240,6 +268,13 @@ class Portal {
     }
 
     companion object {
+        /**
+         * Adjusts a Vector and normalizes it for input->output portal teleportation
+         * @param vector Vector the input Vector
+         * @param inFace BlockFace the BlockFace representing the entry direction
+         * @param outFace BlockFace the BlockFace representing the exit direction
+         * @return Vector the normalized Vector
+         */
         fun normalizeVector(vector: Vector, inFace: BlockFace, outFace: BlockFace): Vector {
             val mod = vector.clone()
             if(inFace.oppositeFace == outFace)
@@ -262,6 +297,11 @@ class Portal {
             return mod.rotateAroundAxis(cross, Math.PI / 2)
         }
 
+        /**
+         * Get the nearest BlockFace direction for a given Vector
+         * @param v Vector the Vector to check
+         * @return BlockFace the nearest BlockFace direction for the provided vector
+         */
         fun getVectorDirection(v: Vector): BlockFace {
             // Get component of largest magnitude
             return if (abs(v.x) > abs(v.y)) {

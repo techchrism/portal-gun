@@ -2,12 +2,15 @@ package me.techchrism.portalgun
 
 import org.bukkit.Color
 import org.bukkit.entity.FallingBlock
-import java.util.*
 
 class PortalPair {
     private var first: Portal? = null
     private var second: Portal? = null
 
+    /**
+     * Fires the first portal
+     * @param candidate PortalCandidate the valid candidate location to fire to
+     */
     fun fireFirst(candidate: PortalCandidate) {
         if (first != null) {
             first!!.destroy()
@@ -16,6 +19,10 @@ class PortalPair {
         first!!.color = Color.BLUE
     }
 
+    /**
+     * Fires the second portal
+     * @param candidate PortalCandidate the valid candidate location to fire to
+     */
     fun fireSecond(candidate: PortalCandidate) {
         if (second != null) {
             second!!.destroy()
@@ -24,6 +31,9 @@ class PortalPair {
         second!!.color = Color.ORANGE
     }
 
+    /**
+     * Removes both portals
+     */
     fun clear() {
         if (first != null) {
             first!!.destroy()
@@ -35,6 +45,9 @@ class PortalPair {
         }
     }
 
+    /**
+     * Ensures the falling sand doesn't drop as an item
+     */
     fun resetFallingTimer() {
         if (first != null) {
             if (first!!.topEntity != null) {
@@ -54,6 +67,9 @@ class PortalPair {
         }
     }
 
+    /**
+     * Draws particles for the portals
+     */
     fun drawParticles() {
         if (first != null) {
             first!!.drawParticles()
@@ -63,6 +79,9 @@ class PortalPair {
         }
     }
 
+    /**
+     * Runs teleportation checks if both portals are formed
+     */
     fun checkTeleportation() {
         if (first == null || second == null) {
             return
@@ -81,15 +100,21 @@ class PortalPair {
         }
     }
 
-    fun checkSucktioning() {
+    /**
+     * Checks suctioning for both portals
+     */
+    fun checkSuctioning() {
         if (first != null) {
-            first!!.checkSucktioning()
+            first!!.checkSuctioning()
         }
         if (second != null) {
-            second!!.checkSucktioning()
+            second!!.checkSuctioning()
         }
     }
 
+    /**
+     * Predicts teleportation if both portals are formed
+     */
     fun predictTeleportation() {
         if (first != null && second != null) {
             first!!.predictTeleportation(second!!)
@@ -97,6 +122,13 @@ class PortalPair {
         }
     }
 
+    /**
+     * Checks for and teleports nearby entities
+     * @param falling FallingBlock the falling sand used as a bounding box to find nearby entities
+     * @param to Portal the portal being teleported to
+     * @param from Portal the portal being teleported from
+     * @param top Boolean whether the falling sand is from the top or bottom of the portal
+     */
     private fun checkEntity(falling: FallingBlock, to: Portal, from: Portal, top: Boolean) {
         for (e in falling.getNearbyEntities(0.0, 0.0, 0.0)) {
             val id = e.uniqueId
